@@ -16,14 +16,13 @@ cd drivingTN-laravel
 composer install
 cp .env.example .env
 php artisan key:generate
-touch database/database.sqlite
-# Dans .env : DB_CONNECTION=sqlite et supprimer DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+# Dans .env : DB_CONNECTION=mysql, DB_DATABASE=code_de_la_route et renseigner vos identifiants MySQL
 php artisan migrate:fresh --seed
 php artisan storage:link
 php artisan serve
 ```
 
-Puis ouvrir [http://127.0.0.1:8000](http://127.0.0.1:8000). Les seeders créent deux examens de démonstration contenant chacun exactement 30 questions en arabe, une illustration locale et un audio public de test. En environnement de production, il est recommandé d’ajouter une authentification et une autorisation dédiées à `/admin`.
+Puis ouvrir [http://127.0.0.1:8000](http://127.0.0.1:8000). Les seeders créent deux examens de démonstration contenant chacun exactement 30 questions en arabe, une illustration locale et un audio public de test. La base de données utilisée est MySQL, avec `code_de_la_route` comme nom par défaut. En environnement de production, il est recommandé d’ajouter une authentification et une autorisation dédiées à `/admin`.
 
 ## Structure
 
@@ -47,4 +46,4 @@ Puis ouvrir [http://127.0.0.1:8000](http://127.0.0.1:8000). Les seeders créent 
 
 ## Vérifications effectuées
 
-Les migrations SQLite, le seeding, le lien de stockage, la liste des routes, l’accueil, l’affichage d’un examen de 30 questions, la soumission de 30 réponses et le calcul d’un résultat de 30/30 ont été vérifiés localement.
+Les migrations MySQL, le seeding, le lien de stockage, la liste des routes, l’accueil, l’affichage d’un examen de 30 questions, la soumission de 30 réponses et le calcul d’un résultat de 30/30 ont été vérifiés localement.
