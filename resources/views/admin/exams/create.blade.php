@@ -1,0 +1,2 @@
+@extends('layout')
+@section('content')<div class="container py-5"><div class="row justify-content-center"><div class="col-lg-8"><a href="{{ route('admin.index') }}">← Retour</a><div class="card mt-3"><div class="card-body p-4"><h1 class="h3 fw-bold mb-4">Créer un examen</h1><form method="POST" action="{{ route('admin.exams.store') }}">@csrf @include('admin.exams._form')<button class="btn btn-primary">Créer l’examen</button></form></div></div></div></div></div>@endsection
