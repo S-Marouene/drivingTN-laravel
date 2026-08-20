@@ -6,7 +6,7 @@ Application Laravel avec Bootstrap 5 permettant aux candidats de pratiquer des e
 
 L’accueil présente tous les examens publiés et autorise un nombre illimité de tentatives. Le candidat répond à 30 questions obligatoires, consulte l’illustration et écoute l’enregistrement associé, puis reçoit immédiatement son score et le statut « Examen réussi » ou « Examen non réussi ».
 
-Le panneau d’administration est disponible à `/admin`. Il permet de créer un examen, de le publier ou de le laisser en brouillon, puis d’ajouter, modifier et supprimer ses questions. Une validation empêche de dépasser 30 questions par examen. Chaque question possède un texte arabe, trois propositions, un index de bonne réponse, une image et un fichier audio facultatifs.
+Le panneau d’administration est disponible à `/admin`. Il permet de définir un délai global par question, identique pour tous les examens, puis de créer un examen, de le publier ou de le laisser en brouillon, et d’ajouter, modifier ou supprimer ses questions. Une validation empêche de dépasser 30 questions par examen. Chaque question possède un texte arabe, trois propositions, un index de bonne réponse, une image et un fichier audio facultatifs.
 
 ## Installation
 

@@ -11,6 +11,7 @@ Route::get('/resultat/{attempt}', [ExamController::class, 'result'])->name('atte
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
+    Route::put('/parametres', [AdminController::class, 'updateSettings'])->name('settings.update');
     Route::get('/examens/nouveau', [AdminController::class, 'createExam'])->name('exams.create');
     Route::post('/examens', [AdminController::class, 'storeExam'])->name('exams.store');
     Route::get('/examens/{exam}', [AdminController::class, 'editExam'])->name('exams.edit');

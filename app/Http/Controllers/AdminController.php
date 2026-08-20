@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Exam;
 use App\Models\Question;
 use Illuminate\Http\Request;
@@ -9,18 +10,31 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
-    public function index() { return view('admin.index', ['exams' => Exam::withCount('questions')->latest()->get()]); }
+    public function index()
+    {
+        return view('admin.index', [
+            'exams' => Exam::withCount('questions')->latest()->get(),
+            'questionDurationSeconds' => (int) AppSetting::getValue('question_duration_seconds', 20),
+        ]);
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $data = $request->validate(['question_duration_seconds' => 'required|integer|between:5,300']);
+        AppSetting::setValue('question_duration_seconds', $data['question_duration_seconds']);
+        return back()->with('success', 'Le temps par question a été mis à jour pour tous les examens.');
+    }
     public function createExam() { return view('admin.exams.create'); }
     public function storeExam(Request $request)
     {
-        $data = $request->validate(['title' => 'required|string|max:255', 'description' => 'nullable|string', 'is_published' => 'nullable|boolean', 'question_duration_seconds' => 'required|integer|between:5,300']);
-        $exam = Exam::create(['title' => $data['title'], 'description' => $data['description'] ?? null, 'is_published' => $request->boolean('is_published', true), 'question_duration_seconds' => $data['question_duration_seconds']]);
+        $data = $request->validate(['title' => 'required|string|max:255', 'description' => 'nullable|string', 'is_published' => 'nullable|boolean']);
+        $exam = Exam::create(['title' => $data['title'], 'description' => $data['description'] ?? null, 'is_published' => $request->boolean('is_published', true)]);
         return redirect()->route('admin.exams.edit', $exam)->with('success', 'Examen créé. Ajoutez maintenant ses 30 questions.');
     }
     public function editExam(Exam $exam) { return view('admin.exams.edit', compact('exam')); }
     public function updateExam(Request $request, Exam $exam)
     {
-        $data = $request->validate(['title' => 'required|string|max:255', 'description' => 'nullable|string', 'question_duration_seconds' => 'required|integer|between:5,300']);
+        $data = $request->validate(['title' => 'required|string|max:255', 'description' => 'nullable|string']);
         $exam->update([...$data, 'is_published' => $request->boolean('is_published')]);
         return back()->with('success', 'Examen mis à jour.');
     }

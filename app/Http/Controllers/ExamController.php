@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Exam;
 use App\Models\ExamAttempt;
 use Illuminate\Http\Request;
@@ -17,7 +18,10 @@ class ExamController extends Controller
     public function show(Exam $exam)
     {
         abort_unless($exam->is_published && $exam->questions()->count() === 30, 404);
-        return view('exams.show', ['exam' => $exam->load('questions')]);
+        return view('exams.show', [
+            'exam' => $exam->load('questions'),
+            'questionDurationSeconds' => (int) AppSetting::getValue('question_duration_seconds', 20),
+        ]);
     }
 
     public function submit(Request $request, Exam $exam)
