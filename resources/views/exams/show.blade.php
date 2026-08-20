@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="container py-4 exam-runner" data-question-count="{{ $exam->questions->count() }}">
+<div class="container py-4 exam-runner" data-question-count="{{ $exam->questions->count() }}" data-duration="{{ $exam->question_duration_seconds }}">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div><a href="{{ route('home') }}" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Retour</a><h1 class="h3 fw-bold mt-2">{{ $exam->title }}</h1></div>
         <span class="badge text-bg-dark">Réussite à 24 / 30</span>
@@ -14,7 +14,7 @@
                 <div class="card-body p-4 p-md-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="badge bg-danger">Question <span class="current-number">{{ $question->position }}</span>/{{ $exam->questions->count() }}</span>
-                        <span class="timer-badge badge text-bg-warning text-dark fs-6"><i class="bi bi-stopwatch"></i> <span class="seconds">20</span> s</span>
+                        <span class="timer-badge badge text-bg-warning text-dark fs-6"><i class="bi bi-stopwatch"></i> <span class="seconds">{{ $exam->question_duration_seconds }}</span> s</span>
                     </div>
                     <div class="progress mb-4" style="height:9px"><div class="progress-bar bg-danger step-progress" style="width:{{ $question->position / $exam->questions->count() * 100 }}%"></div></div>
                     @if($question->audio_path)<div class="mb-3"><label class="form-label fw-semibold"><i class="bi bi-volume-up"></i> Écouter la question</label><audio controls class="w-100 question-audio" src="{{ str_starts_with($question->audio_path,'http') ? $question->audio_path : asset('storage/'.$question->audio_path) }}"></audio></div>@endif
@@ -40,6 +40,7 @@
     const steps = [...document.querySelectorAll('.question-step')];
     const form = document.getElementById('exam-form');
     const submit = document.getElementById('submit-exam');
+    const duration = Number(runner.dataset.duration) || 20;
     let current = 0;
     let timer = null;
     let moving = false;
@@ -55,7 +56,7 @@
         current = index;
         if (timer) clearInterval(timer);
         const step = steps[current];
-        let remaining = 20;
+        let remaining = duration;
         updateTimer(step, remaining);
         timer = setInterval(() => {
             remaining -= 1;
