@@ -42,6 +42,10 @@ class ExamController extends Controller
 
     public function result(ExamAttempt $attempt)
     {
-        return view('exams.result', compact('attempt'));
+        $attempt->load('exam.questions');
+        $wrongQuestions = $attempt->exam->questions->filter(function ($question) use ($attempt) {
+            return (int) ($attempt->answers[$question->id] ?? -1) !== $question->correct_option;
+        });
+        return view('exams.result', compact('attempt', 'wrongQuestions'));
     }
 }
